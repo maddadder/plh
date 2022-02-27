@@ -11,6 +11,9 @@ docker-compose build
 docker-compose up
 
 # Deploy to microk8s
-docker push localhost:32000/csharpauth:1.0
+docker push 192.168.1.84:32000/plhhoa:1.0.12
+microk8s helm3 install plhhoa ./plhhoa
 
-microk8s kubectl apply -f microk8s.yaml
+# Deploy to daffy
+docker push 192.168.1.151:32000/plhhoa:1.0.12
+helm install plhhoa ./plhhoa

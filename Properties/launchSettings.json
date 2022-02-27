@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "cSharpAuth": {
+    "plhhoa": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

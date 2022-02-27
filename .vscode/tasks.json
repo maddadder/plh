@@ -34,7 +34,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/cSharpAuth.csproj",
+                "${workspaceFolder}/plhhoa.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -46,7 +46,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/cSharpAuth.csproj",
+                "${workspaceFolder}/plhhoa.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -59,7 +59,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/cSharpAuth.csproj",
+                "${workspaceFolder}/plhhoa.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

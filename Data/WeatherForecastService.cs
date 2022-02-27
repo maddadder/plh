@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cSharpAuth.Data
+namespace plhhoa.Data
 {
     public class WeatherForecastService
     {

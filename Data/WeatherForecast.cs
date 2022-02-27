@@ -1,6 +1,6 @@
 using System;
 
-namespace cSharpAuth.Data
+namespace plhhoa.Data
 {
     public class WeatherForecast
     {
