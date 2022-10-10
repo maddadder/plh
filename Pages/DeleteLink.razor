@@ -1,0 +1,65 @@
+@page "/link/delete/{userLinkId}"
+@using plhhoa.Services
+@inject UserLinkService UserLinkService
+@inject NavigationManager NavigationManager
+<h2>Delete Link</h2>
+<br />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="form-group">
+            <h4>Do you want to delete this link?</h4>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Content</td>
+                        <td>@link.Content</td>
+                    </tr>
+                    <tr>
+                        <td>Href</td>
+                        <td>@link.Href</td>
+                    </tr>
+                    <tr>
+                        <td>ImgHref</td>
+                        <td>@link.ImgHref</td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td>@link.Category</td>
+                    </tr>
+                    <tr>
+                        <td>Target</td>
+                        <td>@link.Target</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Delete" @onclick="(async () => await RemoveLink(link.Pid))" class="btn btn-danger" />
+            <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string userLinkId { get; set; }
+    UserLink link = new UserLink();
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(userLinkId))
+        {
+            link = await UserLinkService.Get(userLinkId);
+        }
+    }
+    protected async Task RemoveLink(Guid Pid)
+    {
+        await UserLinkService.Delete(Pid);
+        NavigationManager.NavigateTo("/");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

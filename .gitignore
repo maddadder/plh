@@ -1,2 +1,5 @@
 /bin
 /obj
+/.vs
+appsettings.json
+node_modules

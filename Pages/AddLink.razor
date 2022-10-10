@@ -1,0 +1,145 @@
+@page "/link/add"
+@page "/link/edit/{userLinkId}"
+@using Lib
+@using System.IO
+@using plhhoa.Services
+@inject UserLinkService UserLinkService
+@inject NavigationManager NavigationManager
+<h1>@Title UserLink</h1>
+<hr />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="Content" class="form-label">Title</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="link.Content" placeholder="My Website Link" />
+                </div>
+                <ValidationMessage For="@(() => link.Content)" />
+            </div>
+            <div class="mb-3">
+                <label for="Href" class="form-label">Website Link</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="link.WebsiteLink" placeholder="https://www.leenet.link" />
+                </div>
+                <ValidationMessage For="@(() => link.WebsiteLink)" />
+            </div>
+            <div class="mb-3">
+                <label for="ImgHref" class="form-label">Website Image Link</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="link.WebsiteImgLink" placeholder="https://www.leenet.link" />
+                </div>
+                <ValidationMessage For="@(() => link.WebsiteImgLink)" />
+            </div>
+            <div class="mb-3">
+                <label for="ImgContent" class="form-label">Website Image Content</label>
+                <div class="col-md-3">
+                    <InputFile OnChange="@LoadFiles" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <img src="@link.ImgContentBase64" width="100%"/>
+                </div>
+                <div class="col-md-3">
+                    @if(!string.IsNullOrEmpty(link.ImgContentBase64))
+                    {
+                        <span class="btn btn-outline-dark" role="button" @onclick="ClearFile">Clear</span>
+                    }
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="Category" class="form-label">Category</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="link.Category" placeholder="Link" />
+                </div>
+                <ValidationMessage For="@(() => link.Category)" />
+            </div>
+            <div class="mb-3">
+                <label for="Target" class="form-label">Target</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="link.Target" placeholder="_blank" />
+                </div>
+                <ValidationMessage For="@(() => link.Target)" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <span class="btn btn-outline-dark" role="button" @onclick="Cancel">Cancel</span>
+            </div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string userLinkId { get; set; }
+    private EditContext editContext;
+    protected string Title = "Add";
+    protected UserLinkOverride link = new();
+
+    private long fileUploadMaxFileSizeBytes = 1024 * 1000;
+    private const int fileUploadMaxAllowedFiles = 1;
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(userLinkId))
+        {
+            Title = "Edit";
+            var _link = await UserLinkService.Get(userLinkId);
+            link.__T = _link.__T;
+            link.Content = _link.Content;
+            link.Href = _link.Href;
+            link.ImgHref = _link.ImgHref;
+            link.ImgContent = _link.ImgContent;
+            link.Category = _link.Category;
+            link.Pid = _link.Pid;
+            link.Target = _link.Target;
+        }
+    }
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(link);
+    }
+    protected async Task SaveUser()
+    {
+        if (!editContext.Validate())
+            return;
+        if (link.Pid != Guid.Empty)
+        {
+            await UserLinkService.Put(link);
+        }
+        else
+        {
+            await UserLinkService.Post(link);
+        }
+        Cancel();
+    }
+    public async Task ClearFile()
+    {
+        link.ImgContent = null;
+    }
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+
+        foreach (var file in e.GetMultipleFiles(fileUploadMaxAllowedFiles))
+        {
+            try
+            {
+
+                await using MemoryStream fs = new();
+                await file.OpenReadStream(fileUploadMaxFileSizeBytes).CopyToAsync(fs);
+                link.ImgContent = fs.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("File: {Filename} Error: {Error}", 
+                    file.Name, ex.Message);
+            }
+        }
+
+    }
+    public void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

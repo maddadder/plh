@@ -1,0 +1,106 @@
+﻿@page "/usermessage"
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using plhhoa.Services
+@inject UserMessageService UserMessageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<AuthorizeView>
+    <Authorized>
+        @if (userMessages == null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">loading...</div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <a href='/message/add' class="btn btn-primary" role="button">
+                            <i class="fas fa-user-plus"></i>
+                            Add Message
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <input type="text" class="form-control" placeholder="Search messages by content"
+                            @bind="SearchString" @bind:event="oninput" @onkeyup="FilterUser" />
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Message</th><th>Created</th><th>Modified</th><th>&nbsp;</th><th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var message in userMessages.OrderByDescending(x => x.Modified))
+                                {
+                                <tr>
+                                    <td>
+                                        '@message.Body' from '@message.From' to '@message.To'
+                                    </td>
+                                    <td>@message.Created.ToString("MM/dd/yy")</td>
+                                    <td>@message.Modified.ToString("MM/dd/yy")</td>
+                                    <td>
+                                        <a href='/message/edit/@message.Pid' class="btn btn-outline-dark" role="button">
+                                            Edit
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href='/message/delete/@message.Pid' class="btn btn-outline-danger" role="button">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    
+    protected List<UserMessage> userMessages = new();
+    protected List<UserMessage> searchUsermessages = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        userMessages = (await UserMessageService.List("2010-04-01")).ToList();
+        searchUsermessages = userMessages;
+    }
+    protected string SearchString { get; set; } = string.Empty;
+    protected void FilterUser()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            userMessages = searchUsermessages
+                .Where(x => x.Body.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            userMessages = searchUsermessages;
+        }
+    }
+    protected void ResetSearch()
+    {
+        SearchString = string.Empty;
+        userMessages = searchUsermessages;
+    }
+    private void SecureMethod()
+    {
+
+    }
+}

@@ -9,13 +9,17 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using plhhoa.Data;
+using plhhoa.Services;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using plhhoa.HealthChecks;
+using Lib;
 
 namespace plhhoa
 {
@@ -32,7 +36,20 @@ namespace plhhoa
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<WeatherForecastService>();
+            var bindAppSecrets = new AppSecrets();
+            Configuration.Bind("AppSecrets", bindAppSecrets);
+            services.AddSingleton(bindAppSecrets);
+            List<UserToken> tokenCache = new List<UserToken>();
+            services.AddSingleton(tokenCache);
+            services.AddHttpClient<UserProfileService>();
+            services.AddHttpClient<UserLinkService>();
+            services.AddHttpClient<UserMessageService>();
+            services.AddHttpClient<GameEntryService>();
+            services.AddHealthChecks().AddTypeActivatedCheck<CouchClientHealthCheck>(
+                "Sample",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "sample" },
+                args: new object[] {  });
             // This is required to be instantiated before the OpenIdConnectOptions starts getting configured.
             // By default, the claims mapping will map claim names in the old format to accommodate older SAML applications.
             // 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role' instead of 'roles'
@@ -51,6 +68,11 @@ namespace plhhoa
                           MyAuthorizationMiddlewareResultHandler>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +108,7 @@ namespace plhhoa
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

@@ -1,0 +1,1622 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Couchbase Quickstart API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Account/Post": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Creates a UserToken",
+        "description": "Creates a user token given the right credentials",
+        "operationId": "Account-Post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates a user token",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserToken"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserToken"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong Password"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/GameEntry/GetById/{id}": {
+      "get": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Get gameEntry by Id",
+        "description": "Get a gameEntry by Id from the request",
+        "operationId": "GameEntry-GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a report",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameEntry"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameEntry"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameEntry"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/GameEntry": {
+      "post": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Create a gameEntry",
+        "description": "Create a gameEntry from the request",
+        "operationId": "GameEntry-Post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryCreateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryCreateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryCreateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a gameEntry"
+          },
+          "409": {
+            "description": "the href of the link already exists"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/GameEntry/Update/{id}": {
+      "put": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Update a gameEntry",
+        "description": "Update a gameEntry from the request",
+        "operationId": "GameEntry-Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryUpdateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryUpdateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameEntryUpdateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a gameEntry"
+          },
+          "404": {
+            "description": "gameEntry not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/GameEntry/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Delete a gameEntry",
+        "description": "Delete a gameEntry from the request",
+        "operationId": "GameEntry-Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a gameEntry"
+          },
+          "404": {
+            "description": "gameEntry not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/GameEntry/List": {
+      "get": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Search for gameEntries",
+        "description": "Get a list of gameEntries from the request",
+        "operationId": "GameEntry-List",
+        "parameters": [
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of gameEntries",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GameEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GameEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GameEntry"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "tags": [
+          "HealthCheck"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/UserLink/GetById/{id}": {
+      "get": {
+        "tags": [
+          "UserLink"
+        ],
+        "summary": "Get userlink by Id",
+        "description": "Get a userlink by Id from the request",
+        "operationId": "UserLink-GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a UserLink",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLink"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLink"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLink"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "UserLink not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserLink": {
+      "post": {
+        "tags": [
+          "UserLink"
+        ],
+        "summary": "Create a userlink",
+        "description": "Create a userlink from the request",
+        "operationId": "UserLink-Post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkCreateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkCreateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkCreateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a userlink"
+          },
+          "409": {
+            "description": "the href of the link already exists"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserLink/Update/{id}": {
+      "put": {
+        "tags": [
+          "UserLink"
+        ],
+        "summary": "Update a userlink",
+        "description": "Update a userlink from the request",
+        "operationId": "UserLink-Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkUpdateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkUpdateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLinkUpdateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a userlink"
+          },
+          "404": {
+            "description": "userlink not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserLink/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "UserLink"
+        ],
+        "summary": "Delete a userlink",
+        "description": "Delete a userlink from the request",
+        "operationId": "UserLink-Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a userlink"
+          },
+          "404": {
+            "description": "userlink not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserLink/List": {
+      "get": {
+        "tags": [
+          "UserLink"
+        ],
+        "summary": "Search for userlinks",
+        "description": "Get a list of userlinks from the request",
+        "operationId": "UserLink-List",
+        "parameters": [
+          {
+            "name": "Search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of userlinks",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserLink"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserLink"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserLink"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage/GetById/{id}": {
+      "get": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Get usermessage by Id",
+        "description": "Get a usermessage by Id from the request",
+        "operationId": "UserMessage-GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a report",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage": {
+      "post": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Create a usermessage",
+        "description": "Create a usermessage from the request",
+        "operationId": "UserMesssage-Post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageCreateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageCreateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageCreateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a usermessage"
+          },
+          "409": {
+            "description": "the href of the link already exists"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage/twilio": {
+      "post": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Create a usermessage",
+        "description": "Create a usermessage from the request",
+        "operationId": "UserMessage-Post-Twilio",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "ApiVersion",
+                  "Body",
+                  "From",
+                  "To"
+                ],
+                "type": "object",
+                "properties": {
+                  "Body": {
+                    "type": "string"
+                  },
+                  "To": {
+                    "type": "string"
+                  },
+                  "From": {
+                    "type": "string"
+                  },
+                  "ApiVersion": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "Body": {
+                  "style": "form"
+                },
+                "To": {
+                  "style": "form"
+                },
+                "From": {
+                  "style": "form"
+                },
+                "ApiVersion": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a usermessage"
+          },
+          "409": {
+            "description": "the href of the link already exists"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage/Update/{id}": {
+      "put": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Update a usermessage",
+        "description": "Update a usermessage from the request",
+        "operationId": "UserMessage-Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageUpdateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageUpdateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMessageUpdateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a usermessage"
+          },
+          "404": {
+            "description": "usermessage not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Delete a usermessage",
+        "description": "Delete a usermessage from the request",
+        "operationId": "UserMessage-Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a usermessage"
+          },
+          "404": {
+            "description": "usermessage not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserMessage/List": {
+      "get": {
+        "tags": [
+          "UserMessage"
+        ],
+        "summary": "Search for usermessages",
+        "description": "Get a list of usermessages from the request",
+        "operationId": "UserMessage-List",
+        "parameters": [
+          {
+            "name": "Search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of usermessages",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserMessage"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserMessage"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserMessage"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserProfile/GetById/{id}": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Get user profile by Id",
+        "description": "Get a user profile by Id from the request",
+        "operationId": "UserProfile-GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a report",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserProfile": {
+      "post": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Create a user profile",
+        "description": "Create a user profile from the request",
+        "operationId": "UserProfile-Post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileCreateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileCreateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileCreateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a user profile"
+          },
+          "409": {
+            "description": "the email of the user already exists"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserProfile/Update/{id}": {
+      "put": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Update a user profile",
+        "description": "Update a user profile from the request",
+        "operationId": "UserProfile-Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileUpdateRequestCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileUpdateRequestCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileUpdateRequestCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a user profile"
+          },
+          "404": {
+            "description": "user profile not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserProfile/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Delete a profile",
+        "description": "Delete a profile from the request",
+        "operationId": "UserProfile-Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a profile"
+          },
+          "404": {
+            "description": "profile not found"
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/UserProfile/List": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Search for user profiles",
+        "description": "Get a list of user profiles from the request",
+        "operationId": "UserProfile-List",
+        "parameters": [
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of user profiles",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Returns an internal error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GameEntry": {
+        "required": [
+          "description",
+          "name",
+          "options",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameOption"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GameEntryCreateRequestCommand": {
+        "required": [
+          "description",
+          "name",
+          "options"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameOption"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GameEntryUpdateRequestCommand": {
+        "required": [
+          "description",
+          "name",
+          "options",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameOption"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GameOption": {
+        "required": [
+          "description",
+          "next"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLink": {
+        "required": [
+          "content",
+          "href",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string"
+          },
+          "href": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string"
+          },
+          "imgHref": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "imgContent": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "target": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLinkCreateRequestCommand": {
+        "required": [
+          "content",
+          "href"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "href": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string"
+          },
+          "imgHref": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "imgContent": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "target": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLinkUpdateRequestCommand": {
+        "required": [
+          "content",
+          "href",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "content": {
+            "type": "string"
+          },
+          "href": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string"
+          },
+          "imgHref": {
+            "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "imgContent": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "target": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLogin": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserMessage": {
+        "required": [
+          "apiVersion",
+          "body",
+          "from",
+          "pid",
+          "to"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "apiVersion": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserMessageCreateRequestCommand": {
+        "required": [
+          "apiVersion",
+          "body",
+          "from",
+          "to"
+        ],
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "apiVersion": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserMessageUpdateRequestCommand": {
+        "required": [
+          "apiVersion",
+          "body",
+          "from",
+          "pid",
+          "to"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "body": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "apiVersion": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfile": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfileCreateRequestCommand": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfileUpdateRequestCommand": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "validaty": {
+            "type": "string",
+            "example": "00:00:00"
+          },
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "guidId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expiredTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

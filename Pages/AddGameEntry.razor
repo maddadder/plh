@@ -1,0 +1,174 @@
+@page "/gameentry/add"
+@page "/gameentry/edit/{gameEntryId}"
+@using Lib
+@using Microsoft.AspNetCore.Components.Authorization
+@using plhhoa.Services
+@using Microsoft.AspNetCore.WebUtilities
+@inject GameEntryService GameEntryService
+@inject NavigationManager NavigationManager
+@inject NavigationManager UriHelper
+
+<h1>@Title GameEntry</h1>
+<hr />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-light" @onclick="Cancel">Cancel</a>
+            </div>
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="Body" class="form-label">Name</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="gameEntry.Name" placeholder="begin" />
+                </div>
+                <ValidationMessage For="@(() => gameEntry.Name)" />
+            </div>
+            @foreach (var desc in gameEntry.Descriptions) 
+            {
+                <div class="mb-3">
+                    <label for="desc.Value" class="form-label">Paragraph</label>
+                    <div class="col-md-4">
+                        <InputTextArea rows="5" class="form-control" @bind-Value="desc.Value" placeholder="Good morning, Jack Spriggins!" />
+                    </div>
+                    <ValidationMessage For="@(() => desc.Value)" />
+                </div>
+            }
+            <span @onclick="AddDescription" style="text-decoration:underline;cursor:pointer">Add Paragraph</span> | <span @onclick="DeleteDescription" style="text-decoration:underline;cursor:pointer">Delete Paragraph</span>
+            <br/>
+            @foreach (var option in gameEntry.Options) 
+            {
+                <div class="mb-3">
+                    <label for="To" class="form-label">Description</label>
+                    <div class="col-md-4">
+                        <InputText class="form-control" @bind-Value="option.Description" placeholder="Sleep in and enjoy the morning" />
+                    </div>
+                    <ValidationMessage For="@(() => option.Description)" />
+                </div>
+                <div class="mb-3">
+                    <label for="To" class="form-label">Next</label>
+                    <div class="col-md-4">
+                        <InputText class="form-control" @bind-Value="option.Next" placeholder="sleep" />
+                    </div>
+                    <ValidationMessage For="@(() => option.Next)" />
+                </div>
+                <hr/>
+            }
+            <span @onclick="AddOption" style="text-decoration:underline;cursor:pointer">Add Option</span> | <span @onclick="DeleteOption" style="text-decoration:underline;cursor:pointer">Delete Option</span>
+            <div>&#160;</div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string gameEntryId { get; set; }
+
+    public int Skip { get; set; }
+    public int Limit { get; set; }
+
+    private EditContext editContext;
+    protected string Title = "Add";
+    protected GameEntryOverride gameEntry = new();
+    protected override async Task OnParametersSetAsync()
+    {
+        var uri = UriHelper.ToAbsoluteUri(UriHelper.Uri);
+        QueryHelpers.ParseQuery(uri.Query).TryGetValue("Skip", out var param1);
+        var skip = 0;
+        if(param1.Count() > 0){
+            int.TryParse(param1.First(), out skip);
+            Skip = skip;
+        }
+        QueryHelpers.ParseQuery(uri.Query).TryGetValue("Limit", out var param2);
+        if(param2.Count() > 0){
+            var limit = 0;
+            int.TryParse(param2.First(), out limit);
+            Limit = limit;
+        }
+
+        if (!string.IsNullOrEmpty(gameEntryId))
+        {
+            Title = "Edit";
+            var _gameEntry = await GameEntryService.Get(gameEntryId);
+            gameEntry.__T = _gameEntry.__T;
+            gameEntry.Description = _gameEntry.Description;
+            gameEntry.Name = _gameEntry.Name;
+            gameEntry.Options = _gameEntry.Options;
+            gameEntry.Pid = _gameEntry.Pid;
+            gameEntry.Descriptions = (from row in _gameEntry.Description
+                                      select new GameEntryDescription(){
+                                        Value = row
+                                     }).ToList();
+        }
+        else
+        {
+            gameEntry.Descriptions = new List<GameEntryDescription>(){
+                    new GameEntryDescription{
+                        Value = ""
+                    }
+                };
+        }
+    }
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(gameEntry);
+    }
+    protected async Task SaveUser()
+    {
+        gameEntry.Description = gameEntry.Descriptions.Select(x => x.Value).ToList();
+        if (!editContext.Validate())
+            return;
+        if (gameEntry.Pid != Guid.Empty)
+        {
+            await GameEntryService.Put(gameEntry);
+        }
+        else
+        {
+            await GameEntryService.Post(gameEntry);
+        }
+        Cancel();
+    }
+    public void Cancel()
+    {
+        var query = new Dictionary<string, string> 
+        { 
+            { "Skip", Skip.ToString() },
+            { "Limit", Limit.ToString() },
+        };
+        UriHelper.NavigateTo(QueryHelpers.AddQueryString($"{UriHelper.BaseUri}gameentry", query), true);
+    }
+    private void AddDescription()
+    {
+        gameEntry.Descriptions.Add(new GameEntryDescription()
+        {
+            Value=""
+        });
+    }
+    private void DeleteDescription()
+    {
+        if(gameEntry.Descriptions.Any())
+        {
+            gameEntry.Descriptions.RemoveAt(gameEntry.Descriptions.Count - 1);
+        }
+    }
+    private void AddOption()
+    {
+        gameEntry.Options.Add(new GameOption()
+        {
+            Description="",
+            Next=""
+        });
+    }
+    private void DeleteOption()
+    {
+        List<GameOption> options = gameEntry.Options.ToList();
+        if(options.Any())
+        {
+            options.RemoveAt(options.Count - 1);
+        }
+        gameEntry.Options = options.ToList();
+    }
+}

@@ -1,40 +1,133 @@
 ﻿@page "/"
-@using System.Security.Claims
+
+@using Lib
 @using Microsoft.AspNetCore.Components.Authorization
+@using plhhoa.Services
+@inject UserLinkService UserLinkService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
-<AuthorizeView>
-    <Authorized>
-        <h2>Hello, @context.User.Identity.Name!</h2>
-        <p>You can only see this content if you're authorized.</p>
-        <button class="btn btn-primary" @onclick="SecureMethod">Authorized Only Button</button>
-    </Authorized>
-    <NotAuthorized>
-        <h2>Authentication Failure!</h2>
-        <p>You're not signed in.</p>
-        <div class="jumbotron mt-3">
-            <h1>Connect on discord</h1>
-            <ul>
-                <li>We propose using discord for announcements / message board</li>
-                <li>Click <a href="https://discord.gg/4yzD6rSM" target="_blank">here</a> to join our channel on discord</li>
-                <li>If you already joined our discord channel, click <a href="https://discord.com/channels/913518650466635777/" target="_blank">here</a> to access</li>
-            </ul>
+@if (userlinks == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">loading...</div>
         </div>
-    </NotAuthorized>
-</AuthorizeView>
-
-@code {
-    private void SecureMethod() 
-    {
-
-
-    }
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+                <a href='/link/add' class="btn btn-primary" role="button">
+                    <i class="fas fa-user-plus"></i>
+                    Add Link
+                </a>
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <input type="text" class="form-control" placeholder="Search links by name"
+                    @bind="SearchString" @bind:event="oninput" @onkeyup="FilterUser" />
+            </div>
+        </div>
+    </div>
+    <div class="bg-white">
+        <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 md:grid-cols-4">
+            @foreach (var link in userlinks.OrderBy(x => x.Content))
+            {
+                <div key="@link.Pid" class="relative group">
+                    <div class="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100 text-center">
+                        @{
+                            if(!string.IsNullOrEmpty(link.ImgHref))
+                            {
+                                <a target="@link.Target" href="@link.Href"><img src="@link.ImgHref" width="100%"/></a>
+                            }
+                            else if(!string.IsNullOrEmpty(link.ImgContentBase64))
+                            {
+                                <a target="@link.Target" href="@link.Href"><img src="@link.ImgContentBase64" width="100%"/></a>
+                            }
+                            else if(!string.IsNullOrEmpty(link.Category))
+                            {
+                                <a target="@link.Target" href="@link.Href">@link.Category</a>
+                            }
+                        }
+                        <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900 space-x-8">
+                            <h3>@link.Content</h3>
+                        </div>
+                        <br/><span>Created @link.Created.ToString("MM/dd/yy hh:mm:ss")</span>
+                        <br/><span>Modified @link.Modified.ToString("MM/dd/yy hh:mm:ss")</span>
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <a href='/link/details/@link.Pid' class="btn btn-outline-dark" role="button">
+                                        View
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href='/link/edit/@link.Pid' class="btn btn-outline-dark" role="button">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href='/link/delete/@link.Pid' class="btn btn-outline-danger" role="button">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
 }
 
 @code {
+    
+    protected List<UserLinkOverride> userlinks = new();
+    protected List<UserLinkOverride> searchUserlinks = new();
 
-    protected override async Task OnInitializedAsync() {
-       
+    protected override async Task OnInitializedAsync()
+    {
+        userlinks = (from row in (await UserLinkService.List("http", null, null))
+                    select new UserLinkOverride()
+                    {
+                        __T = row.__T,
+                        Category = row.Category,
+                        Content = row.Content,
+                        Created = row.Created,
+                        Href = row.Href,
+                        ImgContent = row.ImgContent,
+                        ImgHref = row.ImgHref,
+                        Modified = row.Modified,
+                        Pid = row.Pid,
+                        Target = row.Target,
+                    }).ToList();
+        searchUserlinks = userlinks;
+    }
+    protected string SearchString { get; set; } = string.Empty;
+    protected void FilterUser()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            userlinks = searchUserlinks
+                .Where(x => x.Content.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            userlinks = searchUserlinks;
+        }
+    }
+    protected void ResetSearch()
+    {
+        SearchString = string.Empty;
+        userlinks = searchUserlinks;
+    }
+    private void SecureMethod()
+    {
+
     }
 }

@@ -1,0 +1,79 @@
+@page "/link/details/{userLinkId}"
+@using Lib
+@using plhhoa.Services
+@inject UserLinkService UserLinkService
+@inject NavigationManager NavigationManager
+<div class="bg-white">
+    <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 md:grid-cols-4">
+        <div key="@link.Pid" class="relative group">
+            <div class="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100 text-center">
+                @{
+                    if(!string.IsNullOrEmpty(link.ImgHref))
+                    {
+                        <a target="@link.Target" href="@link.Href"><img src="@link.ImgHref" width="100%"/></a>
+                    }
+                    else if(!string.IsNullOrEmpty(link.ImgContentBase64))
+                    {
+                        <a target="@link.Target" href="@link.Href"><img src="/userlinkfile/@link.Pid" width="100%"/></a>
+                    }
+                    else if(!string.IsNullOrEmpty(link.Category))
+                    {
+                        <a target="@link.Target" href="@link.Href">@link.Category</a>
+                    }
+                }
+                <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900 space-x-8">
+                    <h3>@link.Content</h3>
+                </div>
+                <br/><span>Created @link.Created.ToString("MM/dd/yy hh:mm:ss")</span>
+                <br/><span>Modified @link.Modified.ToString("MM/dd/yy hh:mm:ss")</span>
+                <table class="table">
+                    <tr>
+                        <td>
+                            <span style="cursor:pointer;" @onclick="Cancel" class="btn btn-outline-dark" role="button">
+                                Back
+                            </span>
+                        </td>
+                        <td>
+                            <a href='/link/edit/@link.Pid' class="btn btn-outline-dark" role="button">
+                                Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a href='/link/delete/@link.Pid' class="btn btn-outline-danger" role="button">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string userLinkId { get; set; }
+    UserLinkOverride link = new UserLinkOverride();
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(userLinkId))
+        {
+            var row = await UserLinkService.Get(userLinkId);
+            link = new UserLinkOverride(){
+                __T = row.__T,
+                Category = row.Category,
+                Content = row.Content,
+                Created = row.Created,
+                Href = row.Href,
+                ImgContent = row.ImgContent,
+                ImgHref = row.ImgHref,
+                Modified = row.Modified,
+                Pid = row.Pid,
+                Target = row.Target,
+            };
+        }
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

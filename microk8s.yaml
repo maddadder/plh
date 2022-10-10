@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: plhhoa
-    release-version: "1.0"
+    release-version: "1.2"
   name: plhhoa
 spec:
   type: NodePort
@@ -23,7 +23,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: plhhoa
-    release-version: "1.0"
+    release-version: "1.2"
   name: plhhoa
 spec:
   replicas: 1
@@ -38,7 +38,7 @@ spec:
         io.kompose.service: plhhoa
     spec:
       containers:
-      - image: localhost:32000/plhhoa:1.0
+      - image: 192.168.1.151:32000/plhhoa:1.0.64
         imagePullPolicy: ""
         name: plhhoa
         ports:

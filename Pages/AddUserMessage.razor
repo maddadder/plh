@@ -1,0 +1,123 @@
+@page "/message/add"
+@page "/message/edit/{userMessageId}"
+@using Lib
+@using Microsoft.AspNetCore.Components.Authorization
+@using plhhoa.Services
+
+@using Twilio
+@using Twilio.Rest.Api.V2010.Account
+@using Twilio.Types
+
+@inject UserMessageService UserMessageService
+@inject NavigationManager NavigationManager
+@inject AppSecrets _appSecrets
+
+<h1>@Title UserMessage</h1>
+<hr />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="Body" class="form-label">Message Content</label>
+                <div class="col-md-4">
+                    <InputTextArea rows="5" class="form-control" @bind-Value="message.Body" placeholder="My Message" />
+                </div>
+                <ValidationMessage For="@(() => message.Body)" />
+            </div>
+            <div class="mb-3">
+                <label for="To" class="form-label">To</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="message.To" placeholder="+12065551212" />
+                </div>
+                <ValidationMessage For="@(() => message.To)" />
+            </div>
+            <div class="mb-3">
+                <label for="Target" class="form-label">From</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="message.From" placeholder="+12065551212" />
+                </div>
+                <ValidationMessage For="@(() => message.From)" />
+            </div>
+            <div class="mb-3">
+                <label for="ApiVersion" class="form-label">Api Version</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="message.ApiVersion" placeholder="2010-04-01" />
+                </div>
+                <ValidationMessage For="@(() => message.ApiVersion)" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-light" @onclick="Cancel">Cancel</a>
+            </div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string userMessageId { get; set; }
+    private EditContext editContext;
+    protected string Title = "Add";
+    protected UserMessage message = new();
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(userMessageId))
+        {
+            Title = "Edit";
+            var _message = await UserMessageService.Get(userMessageId);
+            message.__T = _message.__T;
+            message.Body = _message.Body;
+            message.To = _message.To;
+            message.From = _message.From;
+            message.ApiVersion = _message.ApiVersion;
+            message.Pid = _message.Pid;
+        }
+        else
+        {
+            message.From = _appSecrets.ThisPhoneNumber;
+        }
+    }
+    protected override void OnInitialized()
+    {
+        message.ApiVersion = "2010-04-01";
+        editContext = new EditContext(message);
+    }
+    protected async Task SaveUser()
+    {
+        if (!editContext.Validate())
+            return;
+        if (message.Pid != Guid.Empty)
+        {
+            await UserMessageService.Put(message);
+        }
+        else
+        {
+            await UserMessageService.Post(message);
+            try
+            {
+                var accountSid = _appSecrets.TwilioAccountSid; 
+                var authToken = _appSecrets.TwilioAuthToken;
+                TwilioClient.Init(accountSid, authToken); 
+        
+                var messageOptions = new CreateMessageOptions( 
+                    new PhoneNumber(message.To));   
+                messageOptions.From = message.From;  
+                messageOptions.Body = message.Body;   
+        
+                var _message = MessageResource.Create(messageOptions); 
+            }
+            catch
+            {
+
+            }
+        }
+        Cancel();
+    }
+    public void Cancel()
+    {
+        NavigationManager.NavigateTo("/usermessage");
+    }
+}

@@ -1,13 +1,18 @@
 ﻿@page "/fetchdata"
 
-@using plhhoa.Data
-@inject WeatherForecastService ForecastService
+@using plhhoa.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject UserProfileService UserProfileService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<h1>Weather forecast</h1>
+
+<AuthorizeView>
+    <Authorized>
+<h1>List of users</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (forecasts == null)
+@if (userProfiles == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -16,31 +21,33 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var userProfile in userProfiles)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@userProfile.FirstName</td>
+                    <td>@userProfile.LastName</td>
+                    <td>@userProfile.Email</td>
                 </tr>
             }
         </tbody>
     </table>
 }
-
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
 @code {
-    private WeatherForecast[] forecasts;
+    private IEnumerable<UserProfile> userProfiles;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        userProfiles = await UserProfileService.GetUserProfileAsync("");
     }
 }
