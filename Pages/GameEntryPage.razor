@@ -34,7 +34,7 @@ else
             <div class="col-xs-2 col-md-2">
                 <a href='/gameEntry/add' class="btn btn-primary" role="button">
                     <i class="fas fa-user-plus"></i>
-                    Add Game Entry
+                    Add Content Entry
                 </a>
             </div>
             <div class="col-xs-4 col-md-4">
@@ -87,7 +87,7 @@ else
                                         <li><b>Next:</b> '@gameOption.Next'<b>, Description:</b> '<a style="text-decoration:underline" href="/gameentry/@gameOption.Next" role="button">@gameOption.Description</a>'</li>
                                     }
                                     if(!gameEntry.Options.Any()){
-                                        <li>Game over. Click <a style="text-decoration:underline" href="/gameview/begin">here</a> to start over.</li>
+                                        <li>No more content. Click <a style="text-decoration:underline" href="/gameentry/begin">here</a> to start over.</li>
                                     }
                                 }
                                 </ul>
