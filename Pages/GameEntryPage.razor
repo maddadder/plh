@@ -20,40 +20,16 @@ else
     <div class="container">
         <div class="row">
             <div class="col-xs-2 col-md-2">
-                Action(s)
-            </div>
-            <div class="col-xs-4 col-md-4">
-                Search
-            </div>
-            <div class="col-xs-3 col-md-3">
-                Skip
-            </div>
-            <div class="col-xs-3 col-md-3">
-                Limit
-            </div>
-            <div class="col-xs-2 col-md-2">
                 <a href='/gameEntry/add' class="btn btn-primary" role="button">
                     <i class="fas fa-user-plus"></i>
                     Add Content Entry
                 </a>
             </div>
-            <div class="col-xs-4 col-md-4">
-                <input type="text" class="form-control" placeholder="Search content entry by name"
-                    @bind="SearchString" @bind:event="oninput" @onkeyup="FilterName" />
-            </div>
-            <div class="col-xs-3 col-md-3">
-                <input type="number" class="form-control" 
-                    @bind="Skip" @bind:event="oninput" @onchange="SetPage" step="@Limit" min="0" />
-            </div>
-            <div class="col-xs-3 col-md-3">
-                <input type="number" class="form-control" 
-                    @bind="Limit" @bind:event="oninput" @onchange="SetPage" step="10" min="10" />
-            </div>
             <div class="col-xs-12 col-md-12">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Content</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +60,7 @@ else
                                 {
                                     @foreach (var gameOption in gameEntry.Options)
                                     {
-                                        <li><b>Next:</b> '@gameOption.Next'<b>, Description:</b> '<a style="text-decoration:underline" href="/gameentry/@gameOption.Next" role="button">@gameOption.Description</a>'</li>
+                                        <li><b>link-name:</b> '@gameOption.Next'<b>, link-title:</b> '<a style="text-decoration:underline" href="/gameentry/@gameOption.Next" role="button">@gameOption.Description</a>'</li>
                                     }
                                     if(!gameEntry.Options.Any()){
                                         <li>No more content. Click <a style="text-decoration:underline" href="/gameentry/begin">here</a> to start over.</li>

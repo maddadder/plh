@@ -21,7 +21,7 @@
             <div class="mb-3">
                 <label for="Body" class="form-label">Name</label>
                 <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="gameEntry.Name" placeholder="begin" />
+                    <InputText class="form-control" @bind-Value="gameEntry.Name" placeholder="link-name" />
                 </div>
                 <ValidationMessage For="@(() => gameEntry.Name)" />
             </div>
@@ -30,7 +30,7 @@
                 <div class="mb-3">
                     <label for="desc.Value" class="form-label">Paragraph</label>
                     <div class="col-md-4">
-                        <InputTextArea rows="5" class="form-control" @bind-Value="desc.Value" placeholder="Good morning, Jack Spriggins!" />
+                        <InputTextArea rows="5" class="form-control" @bind-Value="desc.Value" placeholder="Enter your paragraph here" />
                     </div>
                     <ValidationMessage For="@(() => desc.Value)" />
                 </div>
@@ -40,18 +40,18 @@
             @foreach (var option in gameEntry.Options) 
             {
                 <div class="mb-3">
-                    <label for="To" class="form-label">Description</label>
+                    <label for="To" class="form-label">link-name</label>
                     <div class="col-md-4">
-                        <InputText class="form-control" @bind-Value="option.Description" placeholder="Sleep in and enjoy the morning" />
-                    </div>
-                    <ValidationMessage For="@(() => option.Description)" />
-                </div>
-                <div class="mb-3">
-                    <label for="To" class="form-label">Next</label>
-                    <div class="col-md-4">
-                        <InputText class="form-control" @bind-Value="option.Next" placeholder="sleep" />
+                        <InputText class="form-control" @bind-Value="option.Next" placeholder="link-name" />
                     </div>
                     <ValidationMessage For="@(() => option.Next)" />
+                </div>
+                <div class="mb-3">
+                    <label for="To" class="form-label">link-title</label>
+                    <div class="col-md-4">
+                        <InputText class="form-control" @bind-Value="option.Description" placeholder="link-title" />
+                    </div>
+                    <ValidationMessage For="@(() => option.Description)" />
                 </div>
                 <hr/>
             }
