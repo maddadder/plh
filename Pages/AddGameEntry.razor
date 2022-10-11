@@ -19,7 +19,7 @@
             </div>
             <DataAnnotationsValidator />
             <div class="mb-3">
-                <label for="Body" class="form-label">Name</label>
+                <label for="Body" class="form-label">Page Name</label>
                 <div class="col-md-4">
                     <InputText class="form-control" @bind-Value="gameEntry.Name" placeholder="link-name" />
                 </div>
@@ -28,7 +28,7 @@
             @foreach (var desc in gameEntry.Descriptions) 
             {
                 <div class="mb-3">
-                    <label for="desc.Value" class="form-label">Paragraph</label>
+                    <label for="desc.Value" class="form-label">Paragraph @(gameEntry.Descriptions.IndexOf(desc) + 1)</label>
                     <div class="col-md-4">
                         <InputTextArea rows="5" class="form-control" @bind-Value="desc.Value" placeholder="Enter your paragraph here" />
                     </div>
@@ -36,7 +36,8 @@
                 </div>
             }
             <span @onclick="AddDescription" style="text-decoration:underline;cursor:pointer">Add Paragraph</span> | <span @onclick="DeleteDescription" style="text-decoration:underline;cursor:pointer">Delete Paragraph</span>
-            <br/>
+            <div>&#160;</div>
+            <hr/>
             @foreach (var option in gameEntry.Options) 
             {
                 <div class="mb-3">
@@ -53,6 +54,7 @@
                     </div>
                     <ValidationMessage For="@(() => option.Description)" />
                 </div>
+                <div>&#160;</div>
                 <hr/>
             }
             <span @onclick="AddOption" style="text-decoration:underline;cursor:pointer">Add Option</span> | <span @onclick="DeleteOption" style="text-decoration:underline;cursor:pointer">Delete Option</span>
