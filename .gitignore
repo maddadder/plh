@@ -3,3 +3,4 @@
 /.vs
 appsettings.json
 node_modules
+appsettings.Development.json

@@ -138,7 +138,7 @@
             { "Skip", Skip.ToString() },
             { "Limit", Limit.ToString() },
         };
-        UriHelper.NavigateTo(QueryHelpers.AddQueryString($"{UriHelper.BaseUri}gameentry", query), true);
+        UriHelper.NavigateTo(QueryHelpers.AddQueryString($"{UriHelper.BaseUri}gameentry/{gameEntry?.Name}", query), true);
     }
     private void AddDescription()
     {
