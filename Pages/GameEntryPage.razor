@@ -25,6 +25,17 @@ else
                     Add Content Entry
                 </a>
             </div>
+            <div class="col-xs-3 col-md-3">
+                Skip<input type="number" class="form-control" 
+                    @bind="Skip" @bind:event="oninput" @onchange="SetPage" step="@Limit" min="0" />
+            </div>
+            <div class="col-xs-3 col-md-3">
+                Limit<input type="number" class="form-control" 
+                    @bind="Limit" @bind:event="oninput" @onchange="SetPage" step="10" min="10" />
+            </div>
+            <div class="col-xs-12 col-md-4">
+                &#160;
+            </div>
             <div class="col-xs-12 col-md-12">
                 <table class="table">
                     <thead>
