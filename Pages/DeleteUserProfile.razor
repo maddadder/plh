@@ -1,0 +1,58 @@
+@page "/userprofiles/delete/{userProfileId}"
+@using plhhoa.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject UserProfileService UserProfileService
+@inject NavigationManager NavigationManager
+<h2>Delete User</h2>
+<br />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="form-group">
+            <h4>Do you want to delete this user?</h4>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>FirstName</td>
+                        <td>@userProfile.FirstName</td>
+                    </tr>
+                    <tr>
+                        <td>LastName</td>
+                        <td>@userProfile.LastName</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@userProfile.Email</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Delete" @onclick="(async () => await RemoveUserProfile(userProfile.Pid))" class="btn btn-danger" />
+            <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string userProfileId { get; set; }
+    UserProfile userProfile = new UserProfile();
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(userProfileId))
+        {
+            userProfile = await UserProfileService.Get(userProfileId);
+        }
+    }
+    protected async Task RemoveUserProfile(Guid Pid)
+    {
+        await UserProfileService.Delete(Pid);
+        NavigationManager.NavigateTo("/userprofiles");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/userprofiles");
+    }
+}

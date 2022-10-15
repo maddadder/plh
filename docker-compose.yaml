@@ -3,7 +3,7 @@ version: '2'
 services:
 
   plhhoa:
-      image: 192.168.1.151:32000/plhhoa:1.0.76
+      image: 192.168.1.151:32000/plhhoa:1.0.77
       build:
           context: ./
           dockerfile: ./Dockerfile

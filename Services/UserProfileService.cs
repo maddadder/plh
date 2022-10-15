@@ -44,5 +44,38 @@ namespace plhhoa.Services
                 return new List<UserProfile>();
             }
         }
+        public async Task<UserProfile> Get(string id)
+        {
+            Guid g = new Guid(id);
+            await AddAuthorizationHeader();
+            return await client.UserProfileGetByIdAsync(g);
+        }
+        public async Task Put(UserProfile userMessage)
+        {
+            await AddAuthorizationHeader();
+            UserProfileUpdateRequestCommand cmd = new UserProfileUpdateRequestCommand();
+            cmd.FirstName = userMessage.FirstName;
+            cmd.LastName = userMessage.LastName;
+            cmd.Email = userMessage.Email;
+            cmd.Password = userMessage.Password;
+            cmd.Pid = userMessage.Pid;
+            await client.UserProfileUpdateAsync(cmd.Pid.ToString(), cmd);
+        }
+        
+        public async Task Post(UserProfile userMessage)
+        {
+            await AddAuthorizationHeader();
+            UserProfileCreateRequestCommand cmd = new UserProfileCreateRequestCommand();
+            cmd.FirstName = userMessage.FirstName;
+            cmd.LastName = userMessage.LastName;
+            cmd.Email = userMessage.Email;
+            cmd.Password = userMessage.Password;
+            await client.UserProfilePostAsync(cmd);
+        }
+        public async Task Delete(Guid Pid)
+        {
+            await AddAuthorizationHeader();
+            await client.UserProfileDeleteAsync(Pid);
+        }
     }
 }

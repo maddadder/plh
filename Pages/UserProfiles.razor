@@ -1,0 +1,75 @@
+﻿@page "/userprofiles"
+
+@using plhhoa.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject UserProfileService UserProfileService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<AuthorizeView>
+    <Authorized>
+<h1>List of users</h1>
+
+@if (userProfiles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+                <a href='/userprofiles/add' class="btn btn-primary" role="button">
+                    <i class="fas fa-user-plus"></i>
+                    Add User
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var userProfile in userProfiles)
+                        {
+                            <tr>
+                                <td>@userProfile.FirstName</td>
+                                <td>@userProfile.LastName</td>
+                                <td>@userProfile.Email</td>
+                                <td>
+                                    <a href='/userprofiles/edit/@userProfile.Pid' class="btn btn-outline-dark" role="button">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href='/userprofiles/delete/@userProfile.Pid' class="btn btn-outline-danger" role="button">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private IEnumerable<UserProfile> userProfiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userProfiles = await UserProfileService.GetUserProfileAsync("");
+    }
+}
