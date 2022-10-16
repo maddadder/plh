@@ -69,6 +69,10 @@ namespace plhhoa.Services
             cmd.ApiVersion = userMessage.ApiVersion;
             await client.UserMessagePostAsync(cmd);
         }
+        public async Task PostTwilio(UserMessage userMessage)
+        {
+            await client.UserMessagePostTwilioAsync(userMessage.Body,userMessage.To,userMessage.From,userMessage.ApiVersion);
+        }
         public async Task Delete(Guid Pid)
         {
             await AddAuthorizationHeader();
