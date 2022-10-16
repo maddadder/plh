@@ -26,6 +26,10 @@
                         <td>Email</td>
                         <td>@userProfile.Email</td>
                     </tr>
+                    <tr>
+                        <td>Receive Email Notifications</td>
+                        <td>@userProfile.ReceiveEmailNotificationFromSms</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -58,6 +62,7 @@
                 userProfile.LastName = _userProfile.LastName;
                 userProfile.PreferredUsername = _userProfile.PreferredUsername;
                 userProfile.Email = _userProfile.Email;
+                userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
                 userProfile.Password = _userProfile.Password;
                 userProfile.Pid = _userProfile.Pid;
             }

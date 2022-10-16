@@ -42,6 +42,14 @@
                 </div>
                 <ValidationMessage For="@(() => userProfile.Email)" />
             </div>
+            <div class="mb-3">
+                <label for="ReceiveEmailNotificationFromSms" class="form-label">Receive Email Notifications</label>
+                <div class="col-md-4">
+                    <InputCheckbox class="form-control" @bind-Value="userProfile.ReceiveEmailNotificationFromSms" />
+                </div>
+                <ValidationMessage For="@(() => userProfile.ReceiveEmailNotificationFromSms)" />
+            </div>
+            <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a class="btn btn-light" @onclick="Cancel">Cancel</a>
@@ -58,6 +66,7 @@
     private EditContext editContext;
     protected string Title = "Add";
     protected UserProfile userProfile = new();
+    protected string ValidationErrorMessage = "";
     protected override async Task OnParametersSetAsync()
     {
         if (!string.IsNullOrEmpty(userProfileId))
@@ -69,6 +78,7 @@
             userProfile.LastName = _userProfile.LastName;
             userProfile.PreferredUsername = _userProfile.PreferredUsername;
             userProfile.Email = _userProfile.Email;
+            userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
             userProfile.Password = _userProfile.Password;
             userProfile.Pid = _userProfile.Pid;
         }
@@ -85,6 +95,16 @@
     {
         if (!editContext.Validate())
             return;
+        if(userProfile.ReceiveEmailNotificationFromSms && string.IsNullOrEmpty(userProfile.Email))
+        {
+            ValidationErrorMessage = "Email is required when Receive Email Notifications is checked";
+        }
+        else{
+            ValidationErrorMessage = "";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage)){
+            return;
+        }
         if (userProfile.Pid != Guid.Empty)
         {
             await UserProfileService.Put(userProfile);

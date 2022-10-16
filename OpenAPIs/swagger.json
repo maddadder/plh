@@ -1509,6 +1509,9 @@
           "password": {
             "type": "string"
           },
+          "receiveEmailNotificationFromSms": {
+            "type": "boolean"
+          },
           "created": {
             "type": "string",
             "format": "date-time"
@@ -1546,6 +1549,9 @@
           },
           "password": {
             "type": "string"
+          },
+          "receiveEmailNotificationFromSms": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1581,6 +1587,9 @@
           },
           "password": {
             "type": "string"
+          },
+          "receiveEmailNotificationFromSms": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
