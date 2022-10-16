@@ -29,10 +29,21 @@ namespace plhhoa.Services
             _appSecrets = appSecrets;
             client = new swaggerClient("https://plhhoa-couchclient.leenet.link",_httpClient);
         }
-        
+        public async Task<IEnumerable<UserProfile>> GetUserProfilesViaServiceAccount()
+        {
+            try
+            {
+                if(await AddAuthorizationHeader(_appSecrets.PreferredUsernameServiceAccount))
+                    return await client.UserProfileListAsync("", null, null);
+                return new List<UserProfile>();
+            }
+            catch
+            {
+                return new List<UserProfile>();
+            }
+        }
         public async Task<IEnumerable<UserProfile>> GetUserProfileAsync(string search)
         {
-            
             try
             {
                 if(await AddAuthorizationHeader())

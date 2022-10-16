@@ -28,10 +28,18 @@ namespace plhhoa.Services
             _appSecrets = appSecrets;
             client = new swaggerClient("https://plhhoa-couchclient.leenet.link",_httpClient);
         }
-        protected async Task<bool> AddAuthorizationHeader()
+        protected async Task<bool> AddAuthorizationHeader(string serviceAccount = "")
         {
-            var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            string PreferredUsername = state.User?.Username();
+            string PreferredUsername = "";
+            if(!string.IsNullOrEmpty(serviceAccount))
+            {
+                PreferredUsername = serviceAccount;
+            }
+            else
+            {
+                var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+                PreferredUsername = state.User?.Username();
+            }
             if(string.IsNullOrEmpty(PreferredUsername)){
                 return false;
             }
