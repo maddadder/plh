@@ -50,26 +50,28 @@ namespace plhhoa.Services
             await AddAuthorizationHeader();
             return await client.UserProfileGetByIdAsync(g);
         }
-        public async Task Put(UserProfile userMessage)
+        public async Task Put(UserProfile userProfile)
         {
             await AddAuthorizationHeader();
             UserProfileUpdateRequestCommand cmd = new UserProfileUpdateRequestCommand();
-            cmd.FirstName = userMessage.FirstName;
-            cmd.LastName = userMessage.LastName;
-            cmd.Email = userMessage.Email;
-            cmd.Password = userMessage.Password;
-            cmd.Pid = userMessage.Pid;
+            cmd.FirstName = userProfile.FirstName;
+            cmd.LastName = userProfile.LastName;
+            cmd.PreferredUsername = userProfile.PreferredUsername;
+            cmd.Email = string.IsNullOrEmpty(userProfile.Email) ? null : userProfile.Email;
+            cmd.Password = userProfile.Password;
+            cmd.Pid = userProfile.Pid;
             await client.UserProfileUpdateAsync(cmd.Pid.ToString(), cmd);
         }
         
-        public async Task Post(UserProfile userMessage)
+        public async Task Post(UserProfile userProfile)
         {
             await AddAuthorizationHeader();
             UserProfileCreateRequestCommand cmd = new UserProfileCreateRequestCommand();
-            cmd.FirstName = userMessage.FirstName;
-            cmd.LastName = userMessage.LastName;
-            cmd.Email = userMessage.Email;
-            cmd.Password = userMessage.Password;
+            cmd.FirstName = userProfile.FirstName;
+            cmd.LastName = userProfile.LastName;
+            cmd.PreferredUsername = userProfile.PreferredUsername;
+            cmd.Email = string.IsNullOrEmpty(userProfile.Email) ? null : userProfile.Email;
+            cmd.Password = userProfile.Password;
             await client.UserProfilePostAsync(cmd);
         }
         public async Task Delete(Guid Pid)

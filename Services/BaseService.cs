@@ -31,11 +31,11 @@ namespace plhhoa.Services
         protected async Task<bool> AddAuthorizationHeader()
         {
             var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            string email = state.User?.Username();
-            if(string.IsNullOrEmpty(email)){
+            string PreferredUsername = state.User?.Username();
+            if(string.IsNullOrEmpty(PreferredUsername)){
                 return false;
             }
-            var token = _tokenCache.Where(x => x.Email == email).FirstOrDefault();
+            var token = _tokenCache.Where(x => x.PreferredUsername == PreferredUsername).FirstOrDefault();
             if(token != null && token.ExpiredTime > DateTime.UtcNow)
             {
                 _httpClient.DefaultRequestHeaders.Clear();
@@ -43,13 +43,13 @@ namespace plhhoa.Services
                 return true;
             }
             UserLogin login = new UserLogin();
-            login.Email = email;
+            login.PreferredUsername = PreferredUsername;
             login.Password = _appSecrets.UserProfilePassword;
             token = await client.AccountPostAsync(login);
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token.Token));
 
-            var existingToken = _tokenCache.Where(x => x.Email == email).FirstOrDefault();
+            var existingToken = _tokenCache.Where(x => x.PreferredUsername == PreferredUsername).FirstOrDefault();
             if(existingToken!=null){
                 _tokenCache.Remove(existingToken);
                 _tokenCache.Add(token);

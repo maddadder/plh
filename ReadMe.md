@@ -26,13 +26,13 @@ docker-compose down
 # Deploy to microk8s
 ```
 
-docker push 192.168.1.84:32000/plhhoa:1.0.80
+docker push 192.168.1.84:32000/plhhoa:1.0.81
 microk8s helm3 install plhhoa ./plhhoa
 ```
 # on client
 ```
 npm run buildcss
 docker-compose build
-docker push 192.168.1.151:32000/plhhoa:1.0.80
+docker push 192.168.1.151:32000/plhhoa:1.0.81
 helm upgrade plhhoa ./plhhoa
 ```

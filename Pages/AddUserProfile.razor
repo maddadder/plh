@@ -10,7 +10,7 @@
 
 <h1>@Title UserProfile</h1>
 <hr />
-<AuthorizeView>
+<AuthorizeView Roles="admin">
     <Authorized Context="Auth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />
@@ -29,9 +29,16 @@
                 <ValidationMessage For="@(() => userProfile.LastName)" />
             </div>
             <div class="mb-3">
-                <label for="Target" class="form-label">Email</label>
+                <label for="PreferredUsername" class="form-label">preferred username</label>
                 <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userProfile.Email" placeholder="user@leenet.onmicrosoft.com" />
+                    <InputText class="form-control" @bind-Value="userProfile.PreferredUsername" placeholder="user@leenet.onmicrosoft.com" />
+                </div>
+                <ValidationMessage For="@(() => userProfile.PreferredUsername)" />
+            </div>
+            <div class="mb-3">
+                <label for="Email" class="form-label">Email</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="userProfile.Email" placeholder="jdoe@gmail.com" />
                 </div>
                 <ValidationMessage For="@(() => userProfile.Email)" />
             </div>
@@ -60,6 +67,7 @@
             userProfile.__T = _userProfile.__T;
             userProfile.FirstName = _userProfile.FirstName;
             userProfile.LastName = _userProfile.LastName;
+            userProfile.PreferredUsername = _userProfile.PreferredUsername;
             userProfile.Email = _userProfile.Email;
             userProfile.Password = _userProfile.Password;
             userProfile.Pid = _userProfile.Pid;

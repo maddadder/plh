@@ -628,7 +628,7 @@
         ],
         "summary": "Create a usermessage",
         "description": "Create a usermessage from the request",
-        "operationId": "UserMesssage-Post",
+        "operationId": "UserMessage-Post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -958,7 +958,7 @@
             "description": "Create a user profile"
           },
           "409": {
-            "description": "the email of the user already exists"
+            "description": "the PreferredUsername of the user already exists"
           },
           "500": {
             "description": "Returns an internal error"
@@ -1365,12 +1365,12 @@
       },
       "UserLogin": {
         "required": [
-          "email",
-          "password"
+          "password",
+          "preferredUsername"
         ],
         "type": "object",
         "properties": {
-          "email": {
+          "preferredUsername": {
             "type": "string"
           },
           "password": {
@@ -1475,11 +1475,11 @@
       },
       "UserProfile": {
         "required": [
-          "email",
           "firstName",
           "lastName",
           "password",
-          "pid"
+          "pid",
+          "preferredUsername"
         ],
         "type": "object",
         "properties": {
@@ -1499,6 +1499,11 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "preferredUsername": {
+            "type": "string",
             "format": "email"
           },
           "password": {
@@ -1517,10 +1522,10 @@
       },
       "UserProfileCreateRequestCommand": {
         "required": [
-          "email",
           "firstName",
           "lastName",
-          "password"
+          "password",
+          "preferredUsername"
         ],
         "type": "object",
         "properties": {
@@ -1532,6 +1537,11 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "preferredUsername": {
+            "type": "string",
             "format": "email"
           },
           "password": {
@@ -1542,11 +1552,11 @@
       },
       "UserProfileUpdateRequestCommand": {
         "required": [
-          "email",
           "firstName",
           "lastName",
           "password",
-          "pid"
+          "pid",
+          "preferredUsername"
         ],
         "type": "object",
         "properties": {
@@ -1561,6 +1571,11 @@
             "type": "string"
           },
           "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "preferredUsername": {
             "type": "string",
             "format": "email"
           },
@@ -1589,7 +1604,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "email": {
+          "preferredUsername": {
             "type": "string",
             "nullable": true
           },

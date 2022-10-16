@@ -67,7 +67,7 @@ namespace plhhoa.Services
             cmd.To = userMessage.To;
             cmd.From = userMessage.From;
             cmd.ApiVersion = userMessage.ApiVersion;
-            await client.UserMesssagePostAsync(cmd);
+            await client.UserMessagePostAsync(cmd);
         }
         public async Task Delete(Guid Pid)
         {
