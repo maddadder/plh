@@ -55,14 +55,18 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if(authState.User.Identity?.IsAuthenticated == true){
-            var _userProfiles = await UserProfileService.GetUserProfileAsync(authState.User.Identity.Name);
-            var _userProfile = _userProfiles.FirstOrDefault();
-            userProfile.__T = _userProfile.__T;
-            userProfile.FirstName = _userProfile.FirstName;
-            userProfile.LastName = _userProfile.LastName;
-            userProfile.Email = _userProfile.Email;
-            userProfile.Password = _userProfile.Password;
-            userProfile.Pid = _userProfile.Pid;
+            string userName = authState.User.Username();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                var _userProfiles = await UserProfileService.GetUserProfileAsync(userName);
+                var _userProfile = _userProfiles.FirstOrDefault();
+                userProfile.__T = _userProfile.__T;
+                userProfile.FirstName = _userProfile.FirstName;
+                userProfile.LastName = _userProfile.LastName;
+                userProfile.Email = _userProfile.Email;
+                userProfile.Password = _userProfile.Password;
+                userProfile.Pid = _userProfile.Pid;
+            }
         }
     }
     protected override void OnInitialized()

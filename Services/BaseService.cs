@@ -31,7 +31,7 @@ namespace plhhoa.Services
         protected async Task<bool> AddAuthorizationHeader()
         {
             var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            string email = state.User?.Identity?.Name;
+            string email = state.User?.Username();
             if(string.IsNullOrEmpty(email)){
                 return false;
             }
