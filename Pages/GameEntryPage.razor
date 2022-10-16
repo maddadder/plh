@@ -6,7 +6,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager UriHelper
 
-
+<AuthorizeView Roles="game.write">
+    <Authorized Context="Auth">
 @if (gameEntries == null)
 {
     <div class="container">
@@ -87,7 +88,11 @@ else
         </div>
     </div>
 }
-
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
