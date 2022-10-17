@@ -45,6 +45,7 @@ namespace plhhoa
             services.AddHttpClient<UserLinkService>();
             services.AddHttpClient<UserMessageService>();
             services.AddHttpClient<GameEntryService>();
+            services.AddHttpClient<EmailService>();
             services.AddHealthChecks().AddTypeActivatedCheck<CouchClientHealthCheck>(
                 "Sample",
                 failureStatus: HealthStatus.Unhealthy,

@@ -70,6 +70,7 @@ namespace plhhoa.Services
             cmd.PreferredUsername = userProfile.PreferredUsername;
             cmd.Email = string.IsNullOrEmpty(userProfile.Email) ? null : userProfile.Email;
             cmd.ReceiveEmailNotificationFromSms = userProfile.ReceiveEmailNotificationFromSms;
+            cmd.EmailIsVerified = userProfile.EmailIsVerified;
             cmd.Password = userProfile.Password;
             cmd.Pid = userProfile.Pid;
             await client.UserProfileUpdateAsync(cmd.Pid.ToString(), cmd);
@@ -84,6 +85,7 @@ namespace plhhoa.Services
             cmd.PreferredUsername = userProfile.PreferredUsername;
             cmd.Email = string.IsNullOrEmpty(userProfile.Email) ? null : userProfile.Email;
             cmd.ReceiveEmailNotificationFromSms = userProfile.ReceiveEmailNotificationFromSms;
+            cmd.EmailIsVerified = userProfile.EmailIsVerified;
             cmd.Password = userProfile.Password;
             await client.UserProfilePostAsync(cmd);
         }

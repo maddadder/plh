@@ -1,12 +1,15 @@
-@page "/userprofile/view"
+@page "/codeconfirm"
 @using Lib
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.WebUtilities
 @using plhhoa.Services
 
 @inject UserProfileService UserProfileService
 @inject NavigationManager NavigationManager
 @inject AppSecrets _appSecrets
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject EmailService EmailService
+@inject NavigationManager UriHelper
 <h2>UserProfile</h2>
 <br />
 <AuthorizeView>
@@ -45,27 +48,30 @@
 </AuthorizeView>
 @code {
     [Parameter]
-    public string userProfileId { get; set; }
+    public string token { get; set; }
     protected string Title = "View";
     protected UserProfile userProfile = new();
     protected override async Task OnParametersSetAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if(authState.User.Identity?.IsAuthenticated == true){
-            string userName = authState.User.Username();
-            if(!string.IsNullOrEmpty(userName))
+        var uri = UriHelper.ToAbsoluteUri(UriHelper.Uri);
+        QueryHelpers.ParseQuery(uri.Query).TryGetValue("jwt", out var token);
+        
+        var validatedToken = EmailService.ValidateCurrentToken(token);
+        if(validatedToken == null)
+        {
+            return;
+        }
+        string PreferredUsername = EmailService.GetUserIdFromClaim(token);
+        Console.WriteLine($"PreferredUsername: {PreferredUsername}");
+        if (!string.IsNullOrEmpty(PreferredUsername))
+        {
+            var rows = await UserProfileService.GetUserProfileAsync(PreferredUsername);
+            if(rows.Any())
             {
-                var _userProfiles = await UserProfileService.GetUserProfileAsync(userName);
-                var _userProfile = _userProfiles.FirstOrDefault();
-                userProfile.__T = _userProfile.__T;
-                userProfile.FirstName = _userProfile.FirstName;
-                userProfile.LastName = _userProfile.LastName;
-                userProfile.PreferredUsername = _userProfile.PreferredUsername;
-                userProfile.Email = _userProfile.Email;
-                userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
-                userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
-                userProfile.Password = _userProfile.Password;
-                userProfile.Pid = _userProfile.Pid;
+                var row = rows.First();
+                row.EmailIsVerified = true;
+                await UserProfileService.Put(row);
+                userProfile = row;
             }
         }
     }

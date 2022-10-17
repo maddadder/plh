@@ -7,7 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject AppSecrets _appSecrets
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
+@inject EmailService EmailService
 <h1>@Title UserProfile</h1>
 <hr />
 <AuthorizeView>
@@ -60,6 +60,7 @@
     protected string Title = "Edit";
     protected UserProfile userProfile = new();
     protected string ValidationErrorMessage = "";
+    protected string originalEmailAddress = "This will populate on OnParametersSetAsync";
     protected override async Task OnParametersSetAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -74,7 +75,9 @@
                 userProfile.LastName = _userProfile.LastName;
                 userProfile.PreferredUsername = _userProfile.PreferredUsername;
                 userProfile.Email = _userProfile.Email;
+                originalEmailAddress = _userProfile.Email;
                 userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
+                userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
                 userProfile.Password = _userProfile.Password;
                 userProfile.Pid = _userProfile.Pid;
             }
@@ -95,9 +98,17 @@
         else{
             ValidationErrorMessage = "";
         }
-        if(!string.IsNullOrEmpty(ValidationErrorMessage)){
+        if(!string.IsNullOrEmpty(userProfile.Email) && !ConstantsLib.IsValidEmail(userProfile.Email))
+        {
+            ValidationErrorMessage = "Email address is invalid";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
             return;
         }
+
+        await VerifyEmailAddressIfChanged();
+
         if (userProfile.Pid != Guid.Empty)
         {
             await UserProfileService.Put(userProfile);
@@ -108,8 +119,24 @@
         }
         Cancel();
     }
+    protected async Task VerifyEmailAddressIfChanged()
+    {
+        if(
+            !string.IsNullOrEmpty(userProfile.Email) && 
+            originalEmailAddress != userProfile.Email &&
+            userProfile.ReceiveEmailNotificationFromSms &&
+            !userProfile.EmailIsVerified
+        )
+        {
+            await EmailService.SendEmailVerification(userProfile.Email, userProfile.PreferredUsername);
+        }
+    }
     public void Cancel()
     {
         NavigationManager.NavigateTo("/userprofile/view");
+    }
+    protected void OnReceiveEmailNotificationFromSmsChange()
+    {
+
     }
 }

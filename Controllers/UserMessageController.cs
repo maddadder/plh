@@ -49,7 +49,7 @@ public class UserMessageController : ControllerBase
             {
                 client.Credentials = new System.Net.NetworkCredential(_appSecrets.SmtpUserName, _appSecrets.SmtpPassword);
                 client.EnableSsl = true;
-                foreach(var userProfile in userProfiles.Where(x => x.ReceiveEmailNotificationFromSms))
+                foreach(var userProfile in userProfiles.Where(x => x.ReceiveEmailNotificationFromSms && x.EmailIsVerified))
                 {
                     client.Send
                     (

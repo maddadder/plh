@@ -40,6 +40,9 @@ namespace Lib
             get;
             set;
         }
-        
+        public string ApplicationUrl {
+            get;
+            set;
+        }
     }
 }
