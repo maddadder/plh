@@ -106,7 +106,10 @@
         {
             return;
         }
-
+        if(userProfile.Email != originalEmailAddress)
+        {
+            userProfile.EmailIsVerified = false;
+        }
         await VerifyEmailAddressIfChanged();
 
         if (userProfile.Pid != Guid.Empty)
@@ -123,8 +126,6 @@
     {
         if(
             !string.IsNullOrEmpty(userProfile.Email) && 
-            originalEmailAddress != userProfile.Email &&
-            userProfile.ReceiveEmailNotificationFromSms &&
             !userProfile.EmailIsVerified
         )
         {

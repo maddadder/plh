@@ -38,7 +38,7 @@ spec:
         io.kompose.service: plhhoa
     spec:
       containers:
-      - image: 192.168.1.151:32000/plhhoa:1.0.109
+      - image: 192.168.1.151:32000/plhhoa:1.0.110
         imagePullPolicy: ""
         name: plhhoa
         ports:
