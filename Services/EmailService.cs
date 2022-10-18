@@ -38,9 +38,20 @@ namespace plhhoa.Services
         public async Task SendEmailVerification(string To, string PreferredUsername)
         {
             string token = GenerateToken(PreferredUsername);
-            string body = $"If you requested this verification, please go to the following URL to confirm that you are authorized to use this email address: {_appSecrets.ApplicationUrl}/codeconfirm?jwt={token}";
+            string body = 
+$@"
+Dear {_appSecrets.ApplicationUrl} user,
 
-            await SendEmail(To, "Email Verification", body);
+We have received a request to authorize this email address for use with {_appSecrets.ApplicationUrl}. If you requested this verification, please go to the following URL to confirm that you are authorized to use this email address:
+{_appSecrets.ApplicationUrl}/codeconfirm?jwt={token}
+
+Your request to register your email address on this site will not be processed unless you confirm the address using this URL. This link expires 7 days after your original request.
+
+If you did NOT request to verify this email address, do not click on the link. Please note that many times, the situation isn't a phishing attempt, but either a misunderstanding of how to use our service, or someone setting up email-sending capabilities on your behalf as part of a legitimate service, but without having fully communicated the procedure first. 
+If you are still concerned, please text {_appSecrets.ThisPhoneNumber} and let us know that you did not request the verification.
+";
+
+            await SendEmail(To, $"Verify your email address from {_appSecrets.ApplicationUrl}", body);
         }
         public async Task SendEmail(string To, string Subject, string Body)
         {
