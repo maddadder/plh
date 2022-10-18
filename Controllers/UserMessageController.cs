@@ -16,11 +16,14 @@ public class UserMessageController : ControllerBase
     private readonly UserMessageService UserMessageService;
     private readonly UserProfileService UserProfileService;
     private readonly AppSecrets _appSecrets;
+    private readonly EmailService EmailService;
     public UserMessageController(
+        EmailService emailService,
         UserProfileService userProfileService,
         UserMessageService userMessageService, 
         AppSecrets appSecrets)
     {
+        this.EmailService = emailService;
         this.UserProfileService = userProfileService;
         this.UserMessageService = userMessageService;
         _appSecrets = appSecrets;
@@ -42,24 +45,7 @@ public class UserMessageController : ControllerBase
         {
             //first save to database
             await UserMessageService.PostTwilio(request);
-            //then send notifications
-            var userProfiles = await UserProfileService.GetUserProfilesViaServiceAccount();
-            int port = 25;
-            using (var client = new System.Net.Mail.SmtpClient(_appSecrets.SmtpHost, port))
-            {
-                client.Credentials = new System.Net.NetworkCredential(_appSecrets.SmtpUserName, _appSecrets.SmtpPassword);
-                client.EnableSsl = true;
-                foreach(var userProfile in userProfiles.Where(x => x.ReceiveEmailNotificationFromSms && x.EmailIsVerified))
-                {
-                    client.Send
-                    (
-                        _appSecrets.SmtpFromEmail, //From
-                        userProfile.Email,    // To
-                        $"Message From {request.From}",	//Subject		  
-                        request.Body //Body
-                    );
-                }
-            }	
+            await EmailService.SendEmailToSubscribers(request.From, request.Body);
             return Ok();
         }
         else 

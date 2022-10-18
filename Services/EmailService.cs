@@ -19,13 +19,16 @@ namespace plhhoa.Services
         private readonly swaggerClient client;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private List<UserToken> _tokenCache;
+        private readonly UserProfileService UserProfileService;
         public EmailService(
+            UserProfileService userProfileService,
             List<UserToken> tokenCache,
             HttpClient httpClient, 
             AppSecrets appSecrets,
             AuthenticationStateProvider authenticationStateProvider
             ) : base(tokenCache, httpClient, appSecrets, authenticationStateProvider)
         {
+            UserProfileService = userProfileService;
             _tokenCache = tokenCache;
             _authenticationStateProvider = authenticationStateProvider;
             _httpClient = httpClient;
@@ -52,6 +55,37 @@ namespace plhhoa.Services
                 await client.SendMailAsync(mailMessage);
             }
         }
+        public async Task SendEmailToSubscribers(string TwilioFrom, string TwilioBody)
+        {
+            
+            //then send notifications
+            var userProfiles = await UserProfileService.GetUserProfilesViaServiceAccount();
+            int port = 25;
+            using (var client = new System.Net.Mail.SmtpClient(_appSecrets.SmtpHost, port))
+            {
+                client.Credentials = new System.Net.NetworkCredential(_appSecrets.SmtpUserName, _appSecrets.SmtpPassword);
+                client.EnableSsl = true;
+                foreach(var userProfile in userProfiles.Where(x => x.ReceiveEmailNotificationFromSms && x.EmailIsVerified))
+                {
+                    string token = GenerateToken(userProfile.PreferredUsername);
+                    var subject = $"A user has requested to Contact Us from {_appSecrets.ApplicationUrl}";
+                    string body = 
+$@"Message From: {TwilioFrom}
+Message Contents: {TwilioBody}
+
+You received the above message because you have 'Receive Email Notifications' turned on. 
+
+
+To unsubscribe from these messages click here: 
+{_appSecrets.ApplicationUrl}/unsubscribe?jwt={token}";
+                    var mailMessage = new System.Net.Mail.MailMessage(_appSecrets.SmtpFromEmail, userProfile.Email);
+                    mailMessage.Subject = subject;
+                    mailMessage.Body = body;
+                    await client.SendMailAsync(mailMessage);
+                    
+                }
+            }	
+        }
         public string GenerateToken(string PreferredUsername)
         {
             var mySecret = _appSecrets.UserProfilePassword;
@@ -68,8 +102,8 @@ namespace plhhoa.Services
                     new Claim(ClaimTypes.NameIdentifier, PreferredUsername),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                Issuer = myIssuer,
-                Audience = myAudience,
+                //Issuer = myIssuer, //set if multi-tenant
+                //Audience = myAudience, //set if multi-tenant
                 SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -91,10 +125,10 @@ namespace plhhoa.Services
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = myIssuer,
-                    ValidAudience = myAudience,
+                    ValidateIssuer = false, //set to true if multi-tenant
+                    ValidateAudience = false, //set to true if multi-tenant
+                    //ValidIssuer = myIssuer, //set if multi-tenant
+                    //ValidAudience = myAudience, //set if multi-tenant
                     IssuerSigningKey = mySecurityKey
                 }, out SecurityToken validatedToken);
                 return validatedToken;
