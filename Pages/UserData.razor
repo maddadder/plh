@@ -1,0 +1,61 @@
+﻿@page "/userdata"
+
+@using plhhoa.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject UserProfileService UserProfileService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<AuthorizeView Roles="userdata.read">
+    <Authorized>
+<h1>List of users</h1>
+
+@if (userProfiles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>Receive Email Notifications</th>
+                            <th>Email is Verified</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var userProfile in userProfiles)
+                        {
+                            <tr>
+                                <td>@userProfile.FirstName</td>
+                                <td>@userProfile.LastName</td>
+                                <td>@userProfile.Email</td>
+                                <td>@userProfile.ReceiveEmailNotificationFromSms</td>
+                                <td>@userProfile.EmailIsVerified</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private IEnumerable<UserProfile> userProfiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userProfiles = await UserProfileService.GetUserProfileAsync("");
+    }
+}
