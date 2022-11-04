@@ -10,7 +10,7 @@
 @inject EmailService EmailService
 <h1>@Title UserProfile</h1>
 <hr />
-<AuthorizeView>
+<AuthorizeView Roles="userdata.write">
     <Authorized Context="Auth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />

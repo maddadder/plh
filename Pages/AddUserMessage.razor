@@ -14,7 +14,7 @@
 
 <h1>@Title UserMessage</h1>
 <hr />
-<AuthorizeView>
+<AuthorizeView Roles="game.write">
     <Authorized Context="Auth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />

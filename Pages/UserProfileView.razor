@@ -9,7 +9,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 <h2>UserProfile</h2>
 <br />
-<AuthorizeView>
+<AuthorizeView Roles="userdata.write">
     <Authorized Context="Auth">
         <div class="form-group">
             <table class="table">
