@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: 192.168.1.151:32000/plhhoa
+  repository: neon-registry.18e7-091a-7bb4-d81e.neoncluster.io/leenet/plhhoa
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
