@@ -3,7 +3,7 @@ version: '2'
 services:
 
   plhhoa:
-      image: neon-registry.18e7-091a-7bb4-d81e.neoncluster.io/leenet/plhhoa:1.0.124
+      image: neon-registry.18e7-091a-7bb4-d81e.neoncluster.io/leenet/plhhoa:1.0.125
       build:
           context: ./
           dockerfile: ./Dockerfile

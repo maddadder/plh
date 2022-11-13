@@ -23,17 +23,11 @@ Navigate to http://localhost:5001
 ```
 docker-compose down
 ```
-# Deploy to microk8s
-```
-
-docker push 192.168.1.84:32000/plhhoa:1.0.124
-microk8s helm3 install plhhoa ./plhhoa
-```
 # on client
 ```
 npm run buildcss
 docker-compose build
-docker push neon-registry.18e7-091a-7bb4-d81e.neoncluster.io/leenet/plhhoa:1.0.124
+docker push neon-registry.18e7-091a-7bb4-d81e.neoncluster.io/leenet/plhhoa:1.0.125
 helm upgrade plhhoa ./plhhoa --namespace leenet
 
 ```
