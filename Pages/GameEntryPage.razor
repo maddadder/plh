@@ -41,7 +41,7 @@ else
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Content</th>
+                            <th>@PageName</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,6 +98,7 @@ else
 
     [Parameter]
     public string Name { get; set; }
+    private string PageName {get; set; }
 
     public int Skip { get; set; }
     public int Limit { get; set; }
@@ -131,6 +132,12 @@ else
         if (Limit <= 1) 
             Limit = 10;
         gameEntries = (await GameEntryService.List(Name, Limit, Skip)).ToList();
+        if(gameEntries.Any()){
+            PageName = Name;
+        }
+        else{
+            PageName = "404 - File Not Found";
+        }
         searchGameEntries = gameEntries;
     }
     protected void FilterName()
