@@ -27,7 +27,7 @@ docker-compose down
 ```
 npm run buildcss
 docker-compose build
-docker push neon-registry.4e88-13d3-b83a-9fc9.neoncluster.io/leenet/plhhoa:1.0.127
+docker push neon-registry.4e88-13d3-b83a-9fc9.neoncluster.io/leenet/plhhoa:1.0.129
 helm upgrade plhhoa ./plhhoa --namespace leenet
 
 ```

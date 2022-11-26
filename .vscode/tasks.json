@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"label": "clean",
-			"command": "/home/alice/dotnet/dotnet",
+			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"clean",
@@ -15,7 +15,7 @@
 		},
 		{
 			"label": "publish-release",
-			"command": "/home/alice/dotnet/dotnet",
+			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"publish",
@@ -30,7 +30,7 @@
         },
         {
             "label": "build",
-            "command": "/home/alice/dotnet/dotnet",
+            "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
@@ -42,7 +42,7 @@
         },
         {
             "label": "publish",
-            "command": "/home/alice/dotnet/dotnet",
+            "command": "dotnet",
             "type": "process",
             "args": [
                 "publish",
@@ -54,7 +54,7 @@
         },
         {
             "label": "watch",
-            "command": "/home/alice/dotnet/dotnet",
+            "command": "dotnet",
             "type": "process",
             "args": [
                 "watch",

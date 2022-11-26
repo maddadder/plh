@@ -1138,6 +1138,7 @@
             "nullable": true
           },
           "name": {
+            "minLength": 1,
             "type": "string"
           },
           "description": {
@@ -1172,6 +1173,7 @@
         "type": "object",
         "properties": {
           "name": {
+            "minLength": 1,
             "type": "string"
           },
           "description": {
@@ -1203,6 +1205,7 @@
             "format": "uuid"
           },
           "name": {
+            "minLength": 1,
             "type": "string"
           },
           "description": {
@@ -1228,9 +1231,11 @@
         "type": "object",
         "properties": {
           "description": {
+            "minLength": 1,
             "type": "string"
           },
           "next": {
+            "minLength": 1,
             "type": "string"
           }
         },
@@ -1253,9 +1258,11 @@
             "nullable": true
           },
           "content": {
+            "minLength": 1,
             "type": "string"
           },
           "href": {
+            "minLength": 1,
             "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
             "type": "string"
           },
@@ -1296,9 +1303,11 @@
         "type": "object",
         "properties": {
           "content": {
+            "minLength": 1,
             "type": "string"
           },
           "href": {
+            "minLength": 1,
             "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
             "type": "string"
           },
@@ -1336,9 +1345,11 @@
             "format": "uuid"
           },
           "content": {
+            "minLength": 1,
             "type": "string"
           },
           "href": {
+            "minLength": 1,
             "pattern": "^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
             "type": "string"
           },
@@ -1371,9 +1382,11 @@
         "type": "object",
         "properties": {
           "preferredUsername": {
+            "minLength": 1,
             "type": "string"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           }
         },
@@ -1398,15 +1411,19 @@
             "nullable": true
           },
           "body": {
+            "minLength": 1,
             "type": "string"
           },
           "to": {
+            "minLength": 1,
             "type": "string"
           },
           "from": {
+            "minLength": 1,
             "type": "string"
           },
           "apiVersion": {
+            "minLength": 1,
             "type": "string"
           },
           "created": {
@@ -1430,15 +1447,19 @@
         "type": "object",
         "properties": {
           "body": {
+            "minLength": 1,
             "type": "string"
           },
           "to": {
+            "minLength": 1,
             "type": "string"
           },
           "from": {
+            "minLength": 1,
             "type": "string"
           },
           "apiVersion": {
+            "minLength": 1,
             "type": "string"
           }
         },
@@ -1459,15 +1480,19 @@
             "format": "uuid"
           },
           "body": {
+            "minLength": 1,
             "type": "string"
           },
           "to": {
+            "minLength": 1,
             "type": "string"
           },
           "from": {
+            "minLength": 1,
             "type": "string"
           },
           "apiVersion": {
+            "minLength": 1,
             "type": "string"
           }
         },
@@ -1492,9 +1517,11 @@
             "nullable": true
           },
           "firstName": {
+            "minLength": 1,
             "type": "string"
           },
           "lastName": {
+            "minLength": 1,
             "type": "string"
           },
           "email": {
@@ -1503,10 +1530,12 @@
             "nullable": true
           },
           "preferredUsername": {
+            "minLength": 1,
             "type": "string",
             "format": "email"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           },
           "receiveEmailNotificationFromSms": {
@@ -1536,9 +1565,11 @@
         "type": "object",
         "properties": {
           "firstName": {
+            "minLength": 1,
             "type": "string"
           },
           "lastName": {
+            "minLength": 1,
             "type": "string"
           },
           "email": {
@@ -1547,10 +1578,12 @@
             "nullable": true
           },
           "preferredUsername": {
+            "minLength": 1,
             "type": "string",
             "format": "email"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           },
           "receiveEmailNotificationFromSms": {
@@ -1577,9 +1610,11 @@
             "format": "uuid"
           },
           "firstName": {
+            "minLength": 1,
             "type": "string"
           },
           "lastName": {
+            "minLength": 1,
             "type": "string"
           },
           "email": {
@@ -1588,10 +1623,12 @@
             "nullable": true
           },
           "preferredUsername": {
+            "minLength": 1,
             "type": "string",
             "format": "email"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           },
           "receiveEmailNotificationFromSms": {
